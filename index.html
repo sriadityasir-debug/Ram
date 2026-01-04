@@ -12,6 +12,7 @@
             overflow: hidden;
             font-family: 'Mukta', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #000;
+            cursor: pointer; /* Indicates clickable */
         }
 
         /* Background Image */
@@ -26,7 +27,8 @@
             background-position: center;
             background-repeat: no-repeat;
             z-index: -1;
-            filter: brightness(0.5);
+            /* Slightly brighter than before so image is clearer */
+            filter: brightness(0.7); 
             animation: slowZoom 25s infinite alternate ease-in-out;
         }
 
@@ -35,7 +37,7 @@
             to { transform: scale(1.15); }
         }
 
-        /* Text Container */
+        /* Text Container - TRANSPARENT NOW */
         #content-container {
             position: absolute;
             top: 50%;
@@ -43,49 +45,66 @@
             transform: translate(-50%, -50%);
             text-align: center;
             color: #fff;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px;
+            
+            /* Very transparent black background (0.2 opacity) */
+            background: rgba(0, 0, 0, 0.2); 
+            
+            /* Glass-like blur effect */
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+
+            padding: 20px;
             border-radius: 20px;
-            border: 2px solid #FFD700;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
-            width: 85%; /* Better for mobile */
+            border: 1px solid rgba(255, 215, 0, 0.4); /* Faint gold border */
+            width: 90%; 
             max-width: 700px;
             z-index: 10;
         }
 
         #quote-text {
-            font-size: 1.5rem; /* Adjusted for mobile */
-            line-height: 1.6;
-            font-weight: 500;
+            font-size: 1.8rem;
+            line-height: 1.4;
+            font-weight: 700; /* Bold text for readability */
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px black;
-            min-height: 50px;
+            
+            /* Strong Shadow/Outline so text pops on transparent bg */
+            text-shadow: 
+                3px 3px 0 #000, 
+               -1px -1px 0 #000,  
+                1px -1px 0 #000, 
+               -1px  1px 0 #000, 
+                1px  1px 0 #000;
         }
 
         #quote-author {
-            font-size: 1.1rem;
-            color: #FFA500;
+            font-size: 1.2rem;
+            color: #FFD700; /* Gold color */
+            font-weight: bold;
             font-style: italic;
             text-align: right;
-            border-top: 1px solid rgba(255,255,255,0.3);
+            border-top: 1px solid rgba(255,255,255,0.5);
             padding-top: 10px;
             display: block;
+            text-shadow: 2px 2px 4px #000;
         }
 
-        /* Tap for Music Hint */
+        /* Tap Hint */
         #tap-hint {
             margin-top: 20px;
-            font-size: 0.9rem;
-            color: #ccc;
-            opacity: 0.8;
+            font-size: 1rem;
+            color: #fff;
+            background-color: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
             animation: blink 2s infinite;
             display: none; /* Hidden by default */
         }
 
         @keyframes blink {
-            0% { opacity: 0.4; }
+            0% { opacity: 0.5; }
             50% { opacity: 1; }
-            100% { opacity: 0.4; }
+            100% { opacity: 0.5; }
         }
 
         /* Flowers */
@@ -97,6 +116,7 @@
             pointer-events: none;
             animation-name: fall;
             animation-timing-function: linear;
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
         }
 
         @keyframes fall {
@@ -106,25 +126,20 @@
 
         /* Divine Text */
         .divine-text {
-            font-size: 3rem !important; /* Smaller on mobile to fit */
+            font-size: 3.5rem !important;
             font-family: 'Courier New', Courier, monospace;
             color: #FFD700 !important;
-            text-shadow: 0 0 10px #FF4500, 0 0 20px #FF4500;
+            text-shadow: 4px 4px 0 #FF4500, -2px -2px 0 #000;
             animation: glow 2s ease-in-out infinite alternate;
         }
 
-        @media (min-width: 600px) {
-            .divine-text { font-size: 5rem !important; }
-            #quote-text { font-size: 1.9rem; }
-        }
-
         @keyframes glow {
-            from { text-shadow: 0 0 10px #FFD700, 0 0 20px #FF4500; }
-            to { text-shadow: 0 0 20px #FFD700, 0 0 40px #FF4500; }
+            from { filter: drop-shadow(0 0 10px #FFD700); }
+            to { filter: drop-shadow(0 0 20px #FF4500); }
         }
     </style>
 </head>
-<body onclick="playMusicFallback()">
+<body>
 
     <audio id="bg-music" loop>
         <source src="shri-hanuman-chalisa.mp3" type="audio/mpeg">
@@ -135,14 +150,13 @@
     <div id="content-container">
         <div id="quote-text">...</div>
         <div id="quote-author"></div>
-        <div id="tap-hint">🔊 Tap screen for music (स्क्रीन पर टच करें)</div>
+        <div id="tap-hint">🔊 Tap screen for music</div>
     </div>
 
     <script>
-        // --- 1. SAFE QUOTE DISPLAY FUNCTION ---
-        // We define this first so it's ready immediately
+        // --- QUOTES DATABASE ---
         const quotes = [
-            { t: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।", a: "भगवान श्री कृष्ण (गीता)" },
+            { t: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।", a: "भगवान श्री कृष्ण" },
             { t: "रघुकुल रीत सदा चली आई, प्राण जाए पर वचन न जाई।", a: "श्री रामचरितमानस" },
             { t: "राम काज कीन्हें बिनु, मोहि कहाँ विश्राम।", a: "हनुमान जी" },
             { t: "होइहि सोइ जो राम रचि राखा।", a: "गोस्वामी तुलसीदास" },
@@ -265,7 +279,7 @@
             { t: "भय ही पतन और पाप का मुख्य कारण है।", a: "स्वामी विवेकानंद" },
             { t: "मन की एकाग्रता ही समग्र ज्ञान है।", a: "स्वामी विवेकानंद" },
             { t: "जो तुम सोचते हो, वो हो जाओगे।", a: "स्वामी विवेकानंद" },
-            { t: "असतो मा सद्गमय। (मुझे असत्य से सत्य की ओर ले चलो।)", a: "उपनिषद" },
+            { t: "असतो मा सद्गमय।", a: "उपनिषद" },
             { t: "तमसो मा ज्योतिर्गमय।", a: "उपनिषद" },
             { t: "मृत्योर्मा अमृतं गमय।", a: "उपनिषद" },
             { t: "योगः कर्मसु कौशलम्।", a: "भगवान श्री कृष्ण" },
@@ -307,8 +321,7 @@
             { t: "जय जय जय हनुमान गोसाईं, कृपा करहु गुरु देव की नाईं।", a: "हनुमान चालीसा" }
         ];
 
-        // --- 2. LOGIC TO RUN IMMEDIATELY ---
-        // We run this function OUTSIDE window.onload to ensure text appears ASAP
+        // --- VISUAL LOGIC (Runs Immediately) ---
         function showQuoteNow() {
             try {
                 const index = Math.floor(Math.random() * quotes.length);
@@ -316,14 +329,11 @@
                 document.getElementById('quote-author').innerText = quotes[index].a;
             } catch (err) {
                 console.log("Quote Error: " + err);
-                document.getElementById('quote-text').innerText = "जय श्री राम"; // Fallback text
             }
         }
-
-        // Call it immediately
         showQuoteNow();
 
-        // --- 3. FLOWER ANIMATION ---
+        // --- ANIMATION LOGIC ---
         const flowers = ['🌸', '🌺', '🌹', '🌻', '🌼', '🪷', '🍂', '💐'];
         function createFlower() {
             const flower = document.createElement('div');
@@ -336,27 +346,30 @@
             setTimeout(() => { flower.remove(); }, 8000);
         }
 
-        // --- 4. AUDIO & TIMER LOGIC (ON LOAD) ---
+        // --- AUDIO & INIT LOGIC ---
         window.onload = function() {
-            // Start flowers
             setInterval(createFlower, 400);
 
-            // Audio Autoplay Attempt
+            // 1. Try Auto-Play
             const audio = document.getElementById('bg-music');
             audio.volume = 0.7;
-            
-            var promise = audio.play();
-            if (promise !== undefined) {
-                promise.then(_ => {
-                    // Autoplay started!
-                }).catch(error => {
-                    // Autoplay was blocked. Show hint.
-                    console.log("Autoplay blocked. Showing tap hint.");
-                    document.getElementById('tap-hint').style.display = 'block';
-                });
-            }
 
-            // 5-Minute Timer for "Ram-Sita"
+            audio.play().then(() => {
+                // Auto-play Success
+                console.log("Music started automatically.");
+            }).catch(() => {
+                // Auto-play Failed
+                console.log("Auto-play blocked. Waiting for click.");
+                document.getElementById('tap-hint').style.display = 'inline-block';
+                
+                // 2. Add 'Click Anywhere' Listener
+                document.addEventListener('click', function() {
+                    audio.play();
+                    document.getElementById('tap-hint').style.display = 'none';
+                }, { once: true });
+            });
+
+            // 5-Minute Timer
             setTimeout(() => {
                 const text = document.getElementById('quote-text');
                 const author = document.getElementById('quote-author');
@@ -364,23 +377,13 @@
                 
                 text.innerText = "राम-सीता राम-सीता";
                 text.classList.add('divine-text');
+                
                 author.style.display = 'none';
                 hint.style.display = 'none';
                 
                 document.getElementById('content-container').style.border = "4px solid #FF4500";
             }, 300000);
         };
-
-        // --- 5. FALLBACK MUSIC CLICK ---
-        function playMusicFallback() {
-            const audio = document.getElementById('bg-music');
-            const hint = document.getElementById('tap-hint');
-            if(audio.paused) {
-                audio.play();
-                hint.style.display = 'none'; // Hide hint once played
-            }
-        }
-
     </script>
 </body>
 </html>
