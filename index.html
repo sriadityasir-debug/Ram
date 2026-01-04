@@ -2,8 +2,14 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>श्री राम भक्ति</title>
+
 <style>
+    * {
+        box-sizing: border-box;
+    }
+
     html, body {
         margin: 0;
         padding: 0;
@@ -17,57 +23,70 @@
         background: url("1000081533.jpg") no-repeat center center fixed;
         background-size: cover;
         animation: slowZoom 120s infinite alternate linear;
+        filter: brightness(1.25) saturate(1.1);
     }
 
     @keyframes slowZoom {
         from { background-size: 100%; }
-        to { background-size: 110%; }
+        to { background-size: 112%; }
     }
 
+    /* Light overlay for readability */
     .overlay {
         position: absolute;
         inset: 0;
-        background: rgba(0,0,0,0.35);
+        background: rgba(0,0,0,0.25);
     }
 
     .quote-box {
         position: absolute;
-        top: 20%;
+        top: 18%;
         left: 50%;
         transform: translateX(-50%);
-        max-width: 90%;
+        width: 92%;
         text-align: center;
         color: #ffffff;
-        font-size: 1.8rem;
+        font-size: clamp(1.2rem, 4.5vw, 1.8rem);
         line-height: 1.6;
+        padding: 10px;
         text-shadow: 2px 2px 6px #000;
     }
 
     .five-min-message {
         display: none;
         position: absolute;
-        bottom: 15%;
+        bottom: 12%;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 2.2rem;
+        width: 100%;
+        text-align: center;
+        font-size: clamp(1.5rem, 6vw, 2.2rem);
         color: #ffeb3b;
         text-shadow: 2px 2px 6px #000;
+        letter-spacing: 2px;
     }
 
     .flower {
         position: absolute;
-        top: -50px;
+        top: -40px;
         pointer-events: none;
         animation-name: fall;
         animation-timing-function: linear;
     }
 
     @keyframes fall {
-        from { transform: translateY(0) rotate(0deg); opacity: 1; }
-        to { transform: translateY(110vh) rotate(360deg); opacity: 0.8; }
+        from {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        to {
+            transform: translateY(110vh) rotate(360deg);
+            opacity: 0.85;
+        }
     }
 </style>
 </head>
+
 <body>
 
 <div class="overlay"></div>
@@ -80,7 +99,6 @@
 <script>
 /* ========= QUOTES (100+) ========= */
 const quotes = [
-/* --- PREVIOUS 50 --- */
 "कर्म किए जा, फल की चिंता मत कर – श्रीकृष्ण",
 "जो हुआ अच्छा हुआ, जो हो रहा है अच्छा हो रहा है – श्रीकृष्ण",
 "अपने कर्तव्य पर अडिग रहो, विजय निश्चित है – श्रीकृष्ण",
@@ -111,7 +129,6 @@ const quotes = [
 "जो बदल सकता है वही शक्तिशाली है – श्रीकृष्ण",
 "भय छोड़ो, कर्म करो – श्रीकृष्ण",
 
-"राम ही सत्य हैं, राम ही मार्ग हैं",
 "राम नाम अमृत समान है",
 "राम भक्ति जीवन का आधार है",
 "राम स्मरण से दुःख दूर होता है",
@@ -119,58 +136,22 @@ const quotes = [
 
 "हनुमान जी साहस और सेवा का प्रतीक हैं",
 "हनुमान जी की कृपा से बल और बुद्धि मिलती है",
-"हनुमान जी सच्चे भक्तों के रक्षक हैं",
 "हनुमान जी का नाम लेते ही भय दूर हो जाता है",
 "हनुमान जी की भक्ति अमोघ है",
 
-"राम-सीता का नाम जीवन को पवित्र करता है",
-"राम-सीता में ही संपूर्ण आनंद है",
-"राम-सीता का स्मरण शांति देता है",
-"राम-सीता ही जीवन का सार हैं",
-"राम-सीता भक्ति ही सच्चा धन है",
-
-/* --- ADDITIONAL 50 --- */
-"राम नाम का दीप अंधकार दूर कर देता है",
+"राम नाम का दीप अंधकार दूर करता है",
 "राम भक्ति से मन निर्मल होता है",
-"राम नाम से जीवन सफल होता है",
-"राम स्मरण से भय का नाश होता है",
-"राम नाम से आत्मा को बल मिलता है",
+"राम नाम से जीवन प्रकाशित होता है",
+"राम स्मरण से भय नष्ट होता है",
 
-"हनुमान जी की भक्ति से साहस जागृत होता है",
-"हनुमान जी सेवा और समर्पण का आदर्श हैं",
-"हनुमान जी की कृपा से कष्ट मिटते हैं",
-"हनुमान जी की भक्ति अडिग विश्वास सिखाती है",
-"हनुमान जी का नाम संकटों का नाश करता है",
+"हनुमान जी का नाम बल देता है",
+"हनुमान जी का नाम निर्भय बनाता है",
+"हनुमान जी का नाम आत्मविश्वास देता है",
 
 "श्रीकृष्ण सिखाते हैं – कर्म ही पूजा है",
 "श्रीकृष्ण सिखाते हैं – समत्व ही योग है",
-"श्रीकृष्ण सिखाते हैं – आसक्ति दुःख का कारण है",
-"श्रीकृष्ण सिखाते हैं – विश्वास से शक्ति आती है",
-"श्रीकृष्ण सिखाते हैं – सेवा से शांति मिलती है",
-
-"तुलसीदास कहते हैं – राम से बड़ा कोई नहीं",
 "तुलसीदास कहते हैं – राम नाम तारक मंत्र है",
-"तुलसीदास कहते हैं – भक्ति से ही उद्धार है",
-"तुलसीदास कहते हैं – राम ही जीवन का आधार हैं",
-"तुलसीदास कहते हैं – राम नाम अमर है",
-
-"राम भक्ति से मन स्थिर होता है",
-"राम नाम से चित्त प्रसन्न होता है",
-"राम स्मरण से दुःख कट जाते हैं",
-"राम नाम से जीवन प्रकाशित होता है",
-"राम भक्ति से जीवन धन्य होता है",
-
-"हनुमान जी का नाम बल प्रदान करता है",
-"हनुमान जी का नाम निर्भय बनाता है",
-"हनुमान जी का नाम आत्मविश्वास देता है",
-"हनुमान जी का नाम संकट हरता है",
-"हनुमान जी का नाम भक्ति जगाता है",
-
-"राम-सीता का स्मरण मन को शुद्ध करता है",
-"राम-सीता का नाम प्रेम बढ़ाता है",
-"राम-सीता का नाम जीवन को दिशा देता है",
-"राम-सीता का नाम आत्मा को शांति देता है",
-"राम-सीता का नाम मोक्ष का मार्ग दिखाता है"
+"राम-सीता का स्मरण आत्मा को शांति देता है"
 ];
 
 /* ========= RANDOM QUOTE ========= */
@@ -185,12 +166,12 @@ function createFlower() {
     flower.className = "flower";
     flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
     flower.style.left = Math.random() * 100 + "vw";
-    flower.style.animationDuration = (5 + Math.random() * 6) + "s";
-    flower.style.fontSize = (18 + Math.random() * 22) + "px";
+    flower.style.animationDuration = (6 + Math.random() * 6) + "s";
+    flower.style.fontSize = (18 + Math.random() * 20) + "px";
     document.body.appendChild(flower);
     setTimeout(() => flower.remove(), 12000);
 }
-setInterval(createFlower, 280);
+setInterval(createFlower, 300);
 
 /* ========= AUDIO ========= */
 const audio = document.getElementById("bgAudio");
